@@ -1,0 +1,16 @@
+{
+    "contents" : "# This web app uses the Global Biodiversity Information Facility (GBIF) API\n# to map the geographic distribution of a particular species.\n\nlibrary(shiny)\nlibrary(ggvis)\n\nshinyUI(fluidPage(\n\n  titlePanel(\"Global Biodiversity\"),\n\n  sidebarLayout(\n    sidebarPanel(\n        \n        helpText(\"This web app uses the\",\n                 \"Global Biodiversity Information Facility (GBIF) API\",\n                 \"to map the geographic distribution of a particular species.\",\n                 \"GBIF provides a single point of access to more than 400 million\",\n                 \"records related to more than one million species.\"),\n        HTML(\"<br />\"),\n        \n        textInput(\"search\",\n                  label=h5(\"Search species:\"),\n                  value=\"Ursus americanus\"),\n \n        helpText(\"Search by scientific name e.g.,\",\n                 em(\"Ursus americanus.\"), \"Search is\",strong(\"case insensitive.\")),\n        \n        HTML(\"<br />\"),\n        \n        sliderInput(\"gbifLimit\",\n                    label=h5(\"Number of GBIF records to return: \"),\n                    min=50, max=1000, step=10, value=50),\n        \n        helpText(\"By default only the first 50 records are shown.\",\n                 \"You can change this number by using the slider above and\",\n                 \"then pressing the Submit button.\"),\n        \n        HTML(\"<br />\"),\n        HTML(\"<br />\"),\n\n        submitButton(text = \"Submit\"),\n\n        HTML(\"<br />\")\n        \n    ),\n\n    mainPanel(\n        img(src=\"GBIF_logo_short_form.gif\",width=128,height=128),\n        \n        h3(\"GBIF occurrence data\"),\n        \n        h5(\"Searching for...\"),\n        \n        textOutput(\"sp\"),\n        \n        HTML(\"<br />\"),\n        HTML(\"<br />\"),\n        \n        plotOutput(\"map\")\n    )\n  )\n))\n",
+    "created" : 1410607661725.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "864230991",
+    "id" : "82831D1",
+    "lastKnownWriteTime" : 1410610194,
+    "path" : "~/Sites/DataScience/DataProducts/gbif_app/ui.R",
+    "project_path" : "ui.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

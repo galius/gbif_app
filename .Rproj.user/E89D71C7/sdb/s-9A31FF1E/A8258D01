@@ -1,0 +1,16 @@
+{
+    "contents" : "# This web app uses the Global Biodiversity Information Facility (GBIF) API\n# to map the geographic distribution of a particular species.\n\nlibrary(shiny)\nlibrary(ggplot2)\nsuppressPackageStartupMessages(library(rgbif))\nsuppressPackageStartupMessages(library(Hmisc))\n\nshinyServer(function(input, output) {\n    \n    # Convert case insensitive user input to a proper\n    # capitalized scientific name\n    getSpeciesName <- reactive({\n        \n        capitalize(tolower(input$search))\n        \n    })\n    \n    # Search against the GBIF backbone taxonomy and return\n    # the taxonomic keys corresponding to the species searched.\n    getGBIFkeys <- reactive({\n        \n        name_backbone(name=getSpeciesName())$speciesKey\n        \n    })\n    \n    # Echo the species searched.\n    output$sp <- renderText({\n        paste(getSpeciesName())\n    })\n    \n    # Search GBIF records and plot geographic distribution.\n    output$map <- renderPlot({\n        \n        key <- getGBIFkeys()\n        \n        if(is.null(key)){\n            \n            stop(\"Species not found!\")\n            \n        } else {\n            \n            # Search species records with georeferenced information only. The\n            # number of records is specified by the user. Due to\n            # performance considerations, the default number of records\n            # is set to 50.\n            dat <- occ_search(taxonKey=key, return='data',\n                              limit=input$gbifLimit, hasCoordinate = TRUE)\n            \n            # Plot species geographic distribution on a world map.\n            gbifmap(dat)+theme_grey(base_size = 16) +\n                theme(legend.position = \"bottom\", legend.key = element_blank()) +\n                guides(col = guide_legend(nrow = 2))\n        }\n\n    })\n\n\n})\n",
+    "created" : 1410608298210.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3989425505",
+    "id" : "A8258D01",
+    "lastKnownWriteTime" : 1410610078,
+    "path" : "~/Sites/DataScience/DataProducts/gbif_app/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
