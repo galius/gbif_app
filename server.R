@@ -1,10 +1,14 @@
 # This web app uses the Global Biodiversity Information Facility (GBIF) API
 # to map the geographic distribution of a particular species.
+#
+# Author: C.Ribeiro
+# Last Modification: 14/09/2014
+# 
 
 library(shiny)
-library(ggplot2)
 suppressPackageStartupMessages(library(rgbif))
 suppressPackageStartupMessages(library(Hmisc))
+suppressPackageStartupMessages(library(googleVis))
 
 shinyServer(function(input, output) {
     
@@ -29,8 +33,7 @@ shinyServer(function(input, output) {
         paste(getSpeciesName())
     })
     
-    # Search GBIF records and plot geographic distribution.
-    output$map <- renderPlot({
+    output$gvis <- renderGvis({
         
         key <- getGBIFkeys()
         
@@ -45,15 +48,18 @@ shinyServer(function(input, output) {
             # performance considerations, the default number of records
             # is set to 50.
             dat <- occ_search(taxonKey=key, return='data',
+                              fields=c("name","key","decimalLatitude",
+                                       "decimalLongitude","basisOfRecord"),
                               limit=input$gbifLimit, hasCoordinate = TRUE)
             
-            # Plot species geographic distribution on a world map.
-            gbifmap(dat)+theme_grey(base_size = 16) +
-                theme(legend.position = "bottom", legend.key = element_blank()) +
-                guides(col = guide_legend(nrow = 2))
+            # Plot species geographic distribution using googleVis.
+            dat$Loc <- paste(dat$decimalLatitude, dat$decimalLongitude, sep=":")
+            
+            gvisMap(dat,
+                    locationvar="Loc",
+                    tipvar="basisOfRecord")
         }
 
     })
-
-
+  
 })

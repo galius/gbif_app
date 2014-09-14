@@ -1,8 +1,11 @@
 # This web app uses the Global Biodiversity Information Facility (GBIF) API
 # to map the geographic distribution of a particular species.
+#
+# Author: C.Ribeiro
+# Last Modification: 14/09/2014
+# 
 
 library(shiny)
-library(ggvis)
 
 shinyUI(fluidPage(
 
@@ -40,7 +43,12 @@ shinyUI(fluidPage(
 
         submitButton(text = "Submit"),
 
-        HTML("<br />")
+        HTML("<br />"),
+        HTML("<br />"),
+        HTML("<br />"),
+        
+        helpText("The tooltips on the markers display the basis of the record",
+                 "(e.g., HUMAN_OBSERVATION) for that particular location")
         
     ),
 
@@ -56,7 +64,7 @@ shinyUI(fluidPage(
         HTML("<br />"),
         HTML("<br />"),
         
-        plotOutput("map")
+        htmlOutput("gvis")
     )
   )
 ))
